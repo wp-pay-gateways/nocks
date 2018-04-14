@@ -61,21 +61,6 @@ class Gateway extends Core_Gateway {
 		return true;
 	}
 
-	/**
-	 * Get payment methods
-	 *
-	 * @see Pronamic_WP_Pay_Gateway::get_payment_methods()
-	 */
-	public function get_payment_methods() {
-		$groups = array();
-
-		$groups[] = array(
-			'options' => $this->get_supported_payment_methods(),
-		);
-
-		return $groups;
-	}
-
 	public function get_issuer_field() {
 		$payment_method = $this->get_payment_method();
 
