@@ -34,6 +34,11 @@ class Gateway extends Core_Gateway {
 
 		$this->client->set_api_key( $config->api_key );
 		$this->client->set_merchant_profile( $config->merchant_profile );
+
+		// Feature supports.
+		$this->supports = array(
+			'payment_status_request',
+		);
 	}
 
 	/////////////////////////////////////////////////
@@ -137,7 +142,7 @@ class Gateway extends Core_Gateway {
 		}
 
 		if ( isset( $result->data->payments->data[0]->uuid ) ) {
-			$payment->set_transaction_id( $result->data->payments->data[0]->uuid );
+			$payment->set_transaction_id( $result->data->uuid );
 		}
 
 		if ( isset( $result->data->payments->data[0]->metadata->url ) ) {
@@ -153,33 +158,22 @@ class Gateway extends Core_Gateway {
 	 * @param Payment $payment
 	 */
 	public function update_status( Payment $payment ) {
-		$input_status = null;
+		$transaction_id = $payment->get_transaction_id();
 
-		// Update status on customer return.
-		if ( filter_has_var( INPUT_GET, 'transactionId' ) && filter_has_var( INPUT_GET, 'status' ) ) {
-			$transaction_uuid = filter_input( INPUT_GET, 'transactionId', FILTER_SANITIZE_STRING );
+		$nocks_payment = $this->client->get_transaction( $transaction_id );
 
-			$transaction = $this->client->get_transaction( $transaction_uuid );
+		if ( ! $nocks_payment ) {
+			$payment->set_status( Core_Statuses::FAILURE );
 
-			if ( $transaction ) {
-				$input_status = $transaction->data->status;
-			}
-		}
+			$this->error = $this->client->get_error();
 
-		// Update status via webhook.
-		if ( isset( $payment->meta['nocks_update_status'] ) ) {
-			$input_status = $payment->meta['nocks_update_status'];
-
-			$payment->set_meta( 'nocks_update_status', null );
-		}
-
-		if ( ! $input_status ) {
 			return;
 		}
 
-		// Update payment status.
-		$status = Statuses::transform( $input_status );
+		if ( is_object( $nocks_payment ) && isset( $nocks_payment->data->status ) ) {
+			$status = Statuses::transform( $nocks_payment->data->status );
 
-		$payment->set_status( $status );
+			$payment->set_status( $status );
+		}
 	}
 }
