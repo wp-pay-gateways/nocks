@@ -87,9 +87,26 @@ class Gateway extends Core_Gateway {
 	 */
 	public function start( Payment $payment ) {
 		$payment_method = $payment->get_method();
+		$currency       = $payment->get_currency();
+		$amount         = $payment->get_amount();
 
 		if ( empty( $payment_method ) ) {
 			$payment_method = PaymentMethods::IDEAL;
+		}
+
+		if ( PaymentMethods::GULDEN === $payment_method ) {
+			switch ( $currency ) {
+				case 'EUR':
+					// Convert to EUR.
+					$quote = $this->client->get_transaction_quote( 'EUR', 'NLG', $amount, Methods::IDEAL );
+
+					if ( $quote ) {
+						$amount   = $quote->data->target_amount->amount;
+						$currency = 'NLG';
+					}
+
+					break;
+			}
 		}
 
 		$transaction = new Transaction();
@@ -97,8 +114,8 @@ class Gateway extends Core_Gateway {
 		$transaction->payment_id       = $payment->get_id();
 		$transaction->merchant_profile = $this->config->merchant_profile;
 		$transaction->description      = $payment->get_description();
-		$transaction->currency         = $payment->get_currency();
-		$transaction->amount           = $payment->get_amount();
+		$transaction->currency         = $currency;
+		$transaction->amount           = $amount;
 		$transaction->locale           = $payment->get_locale();
 		$transaction->payment_method   = Methods::transform( $payment->get_method() );
 		$transaction->redirect_url     = $payment->get_return_url();
