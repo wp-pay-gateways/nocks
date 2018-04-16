@@ -119,7 +119,7 @@ class Gateway extends Core_Gateway {
 		$transaction->locale           = $payment->get_locale();
 		$transaction->payment_method   = Methods::transform( $payment->get_method() );
 		$transaction->redirect_url     = $payment->get_return_url();
-		$transaction->callback_url     = add_query_arg( 'nocks_webhook', '', 'http://www.reuel.nl/' );
+		$transaction->callback_url     = add_query_arg( 'nocks_webhook', '', home_url( '/' ) );
 		$transaction->description      = $payment->get_description();
 
 		if ( Methods::IDEAL === $transaction->payment_method ) {
@@ -134,6 +134,10 @@ class Gateway extends Core_Gateway {
 			$this->error = $error;
 
 			return;
+		}
+
+		if ( isset( $result->data->payments->data[0]->uuid ) ) {
+			$payment->set_transaction_id( $result->data->payments->data[0]->uuid );
 		}
 
 		if ( isset( $result->data->payments->data[0]->metadata->url ) ) {
@@ -151,20 +155,18 @@ class Gateway extends Core_Gateway {
 	public function update_status( Payment $payment ) {
 		$input_status = null;
 
-		// Update status on customer return
+		// Update status on customer return.
 		if ( filter_has_var( INPUT_GET, 'transactionId' ) && filter_has_var( INPUT_GET, 'status' ) ) {
 			$transaction_uuid = filter_input( INPUT_GET, 'transactionId', FILTER_SANITIZE_STRING );
 
 			$transaction = $this->client->get_transaction( $transaction_uuid );
 
 			if ( $transaction ) {
-				$payment->set_transaction_id( $transaction->data->uuid );
-
 				$input_status = $transaction->data->status;
 			}
 		}
 
-		// Update status via webhook
+		// Update status via webhook.
 		if ( isset( $payment->meta['nocks_update_status'] ) ) {
 			$input_status = $payment->meta['nocks_update_status'];
 
@@ -175,7 +177,7 @@ class Gateway extends Core_Gateway {
 			return;
 		}
 
-		// Update payment status
+		// Update payment status.
 		$status = Statuses::transform( $input_status );
 
 		$payment->set_status( $status );
