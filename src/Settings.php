@@ -49,7 +49,7 @@ class Settings extends GatewaySettings {
 			'filter'   => FILTER_SANITIZE_STRING,
 			'section'  => 'nocks',
 			'meta_key' => '_pronamic_gateway_nocks_api_key',
-			'title'    => _x( 'API Key', 'nocks', 'pronamic_ideal' ),
+			'title'    => _x( 'Access Token', 'nocks', 'pronamic_ideal' ),
 			'type'     => 'textarea',
 			'classes'  => array( 'code' ),
 		);
