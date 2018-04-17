@@ -31,16 +31,12 @@ class Client {
 	 */
 	const NOCKS_DOMAIN = 'https://www.nocks.com/';
 
-	//////////////////////////////////////////////////
-
 	/**
 	 * Error
 	 *
 	 * @var WP_Error
 	 */
 	private $error;
-
-	//////////////////////////////////////////////////
 
 	/**
 	 * The URL.
@@ -49,7 +45,6 @@ class Client {
 	 */
 	private $url;
 
-	//////////////////////////////////////////////////
 
 	/**
 	 * Error
@@ -59,8 +54,6 @@ class Client {
 	public function get_error() {
 		return $this->error;
 	}
-
-	//////////////////////////////////////////////////
 
 	/**
 	 * Get API key.
@@ -76,8 +69,6 @@ class Client {
 		$this->api_key = $api_key;
 	}
 
-	//////////////////////////////////////////////////
-
 	/**
 	 * Get merchant profile.
 	 */
@@ -87,12 +78,12 @@ class Client {
 
 	/**
 	 * Set merchant profile.
+	 *
+	 * @param string $merchant_profile Merchant profile id.
 	 */
 	public function set_merchant_profile( $merchant_profile ) {
 		$this->merchant_profile = $merchant_profile;
 	}
-
-	//////////////////////////////////////////////////
 
 	/**
 	 * Get issuers.
@@ -112,20 +103,18 @@ class Client {
 		);
 	}
 
-	//////////////////////////////////////////////////
-
 	/**
 	 * Send request with the specified action and parameters
 	 *
-	 * @param string $end_point
-	 * @param string $method
-	 * @param array $data
-	 * @param int $expected_response_code
+	 * @param string $end_point              Request end point.
+	 * @param string $method                 HTTP method.
+	 * @param array  $data                   Data.
+	 * @param int    $expected_response_code Expected response code.
 	 *
 	 * @return bool|object
 	 */
 	private function send_request( $end_point, $method = 'GET', array $data = array(), $expected_response_code = 200 ) {
-		// Request
+		// Request.
 		$url = self::API_URL . $end_point;
 
 		if ( is_array( $data ) && ! empty( $data ) ) {
@@ -142,14 +131,14 @@ class Client {
 			'body'    => $data,
 		) );
 
-		// Response code
+		// Response code.
 		$response_code = wp_remote_retrieve_response_code( $response );
 
 		if ( $expected_response_code != $response_code ) { // WPCS: loose comparison ok.
 			$this->error = new WP_Error( 'nocks_error', 'Unexpected response code.' );
 		}
 
-		// Body
+		// Body.
 		$body = wp_remote_retrieve_body( $response );
 
 		$data = json_decode( $body );
@@ -160,7 +149,7 @@ class Client {
 			return false;
 		}
 
-		// Nocks error
+		// Nocks error.
 		if ( isset( $data->error, $data->error->message ) ) {
 			$this->error = new WP_Error( 'nocks_error', $data->error->message, $data->error );
 
@@ -194,7 +183,7 @@ class Client {
 	/**
 	 * Start transaction.
 	 *
-	 * @param Transaction $transaction
+	 * @param Transaction $transaction Transaction object.
 	 *
 	 * @return array|bool|mixed|object
 	 */
@@ -210,7 +199,7 @@ class Client {
 	/**
 	 * Get transaction.
 	 *
-	 * @param string $transaction_uuid
+	 * @param string $transaction_uuid Transaction UUID.
 	 *
 	 * @return array|bool|mixed|object
 	 */
@@ -224,7 +213,10 @@ class Client {
 	/**
 	 * Get transaction quote.
 	 *
-	 * @param string $transaction_data
+	 * @param string $source_currency Source currency.
+	 * @param string $target_currency Target currency.
+	 * @param string $amount          Amount in given source currency.
+	 * @param string $payment_method  Payment method.
 	 *
 	 * @return array|bool|mixed|object
 	 */

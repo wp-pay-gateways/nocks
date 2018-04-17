@@ -52,10 +52,11 @@ class Methods {
 
 	/**
 	 * Transform WordPress payment method to Nocks method.
+	 * Nocks only offers Gulden payment method to merchants.
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param $payment_method
+	 * @param string $payment_method WordPress Pay payment method.
 	 *
 	 * @return string
 	 */

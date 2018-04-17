@@ -16,18 +16,28 @@ use Pronamic\WordPress\Pay\Util as Pay_Util;
  * @since 1.0.0
  */
 class Settings extends GatewaySettings {
+	/**
+	 * Settings constructor.
+	 */
 	public function __construct() {
 		add_filter( 'pronamic_pay_gateway_sections', array( $this, 'sections' ) );
 		add_filter( 'pronamic_pay_gateway_fields', array( $this, 'fields' ) );
 	}
 
+	/**
+	 * Settings sections.
+	 *
+	 * @param array $sections Sections.
+	 *
+	 * @return array
+	 */
 	public function sections( array $sections ) {
 		$sections['nocks'] = array(
 			'title'   => __( 'Nocks', 'pronamic_ideal' ),
 			'methods' => array( 'nocks' ),
 		);
 
-		// Transaction feedback
+		// Transaction feedback.
 		$sections['nocks_feedback'] = array(
 			'title'       => __( 'Transaction feedback', 'pronamic_ideal' ),
 			'methods'     => array( 'nocks' ),
@@ -37,6 +47,13 @@ class Settings extends GatewaySettings {
 		return $sections;
 	}
 
+	/**
+	 * Settings fields.
+	 *
+	 * @param array $fields Settings fields.
+	 *
+	 * @return array
+	 */
 	public function fields( array $fields ) {
 		// API Key
 		$fields[] = array(
@@ -48,7 +65,7 @@ class Settings extends GatewaySettings {
 			'classes'  => array( 'code' ),
 		);
 
-		// Merchant profile
+		// Merchant profile.
 		$fields[] = array(
 			'filter'   => FILTER_SANITIZE_STRING,
 			'section'  => 'nocks',
@@ -58,7 +75,7 @@ class Settings extends GatewaySettings {
 			'callback' => array( $this, 'field_merchant_profile' ),
 		);
 
-		// Transaction feedback
+		// Transaction feedback.
 		$fields[] = array(
 			'section' => 'nocks',
 			'title'   => __( 'Transaction feedback', 'pronamic_ideal' ),
@@ -69,7 +86,7 @@ class Settings extends GatewaySettings {
 			),
 		);
 
-		// Webhook
+		// Webhook URL.
 		$fields[] = array(
 			'section'  => 'nocks_feedback',
 			'title'    => __( 'Webhook URL', 'pronamic_ideal' ),
@@ -84,6 +101,11 @@ class Settings extends GatewaySettings {
 		return $fields;
 	}
 
+	/**
+	 * Field merchant profile select.
+	 *
+	 * @param array $field Settings field.
+	 */
 	public function field_merchant_profile( $field ) {
 		$api_key          = get_post_meta( get_the_ID(), '_pronamic_gateway_nocks_api_key', true );
 		$merchant_profile = get_post_meta( get_the_ID(), '_pronamic_gateway_nocks_merchant_profile', true );
@@ -98,7 +120,7 @@ class Settings extends GatewaySettings {
 
 		$client->set_api_key( $api_key );
 
-		// Select
+		// Select merchant profile.
 		printf( '<select name="%s">', esc_attr( $field['meta_key'] ) );
 
 		$options = array( array( 'options' => $client->get_merchant_profiles() ) );

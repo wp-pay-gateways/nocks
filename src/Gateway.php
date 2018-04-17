@@ -20,7 +20,7 @@ class Gateway extends Core_Gateway {
 	/**
 	 * Constructs and initializes an Nocks gateway.
 	 *
-	 * @param Config $config
+	 * @param Config $config Config.
 	 */
 	public function __construct( Config $config ) {
 		parent::__construct( $config );
@@ -29,7 +29,7 @@ class Gateway extends Core_Gateway {
 		$this->set_has_feedback( true );
 		$this->set_amount_minimum( 0.01 );
 
-		// Client
+		// Client.
 		$this->client = new Client();
 
 		$this->client->set_api_key( $config->api_key );
@@ -40,8 +40,6 @@ class Gateway extends Core_Gateway {
 			'payment_status_request',
 		);
 	}
-
-	/////////////////////////////////////////////////
 
 	/**
 	 * Get supported payment methods.
@@ -68,7 +66,7 @@ class Gateway extends Core_Gateway {
 	 *
 	 * @see Core_Gateway::start()
 	 *
-	 * @param Payment $payment
+	 * @param Payment $payment The payment.
 	 */
 	public function start( Payment $payment ) {
 		$payment_method = $payment->get_method();
@@ -130,12 +128,10 @@ class Gateway extends Core_Gateway {
 		}
 	}
 
-	/////////////////////////////////////////////////
-
 	/**
 	 * Update status of the specified payment.
 	 *
-	 * @param Payment $payment
+	 * @param Payment $payment The payment.
 	 */
 	public function update_status( Payment $payment ) {
 		$transaction_id = $payment->get_transaction_id();
