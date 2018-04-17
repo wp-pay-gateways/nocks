@@ -53,15 +53,6 @@ class Gateway extends Core_Gateway {
 	}
 
 	/**
-	 * Is payment method required?
-	 *
-	 * @return bool
-	 */
-	public function payment_method_is_required() {
-		return true;
-	}
-
-	/**
 	 * Start.
 	 *
 	 * @see Core_Gateway::start()
