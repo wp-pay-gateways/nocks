@@ -123,7 +123,17 @@ class Settings extends GatewaySettings {
 		// Select merchant profile.
 		printf( '<select name="%s">', esc_attr( $field['meta_key'] ) );
 
-		$options = array( array( 'options' => $client->get_merchant_profiles() ) );
+		$options = array(
+			__( '— Select Merchant Profile —', 'pronamic_ideal' ),
+		);
+
+		$options = array_merge( $options, $client->get_merchant_profiles() );
+
+		$options = array(
+			array(
+				'options' => $options,
+			),
+		);
 
 		echo Pay_Util::select_options_grouped( $options, $merchant_profile ); // WPCS: xss ok.
 
