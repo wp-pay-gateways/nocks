@@ -2,10 +2,7 @@
 
 namespace Pronamic\WordPress\Pay\Gateways\Nocks;
 
-use Pronamic\WordPress\Pay\GatewayPostType;
 use Pronamic\WordPress\Pay\Plugin;
-use Pronamic\WordPress\Pay\Core\Gateway;
-use WP_Query;
 
 /**
  * Title: Nocks listener
