@@ -50,8 +50,6 @@ class Methods {
 	 */
 	const SEPA = 'sepa';
 
-	/////////////////////////////////////////////////
-
 	/**
 	 * Transform WordPress payment method to Nocks method.
 	 *
@@ -63,18 +61,8 @@ class Methods {
 	 */
 	public static function transform( $payment_method ) {
 		switch ( $payment_method ) {
-			case PaymentMethods::BANCONTACT:
-				return self::BANCONTACT;
-
-			case PaymentMethods::GIROPAY:
-				return self::GIROPAY;
-
 			case PaymentMethods::GULDEN:
 				return self::GULDEN;
-
-			case PaymentMethods::IDEAL:
-				return self::IDEAL;
-
 			default:
 				return null;
 		}

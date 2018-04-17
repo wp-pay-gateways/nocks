@@ -50,10 +50,7 @@ class Gateway extends Core_Gateway {
 	 */
 	public function get_supported_payment_methods() {
 		return array(
-			PaymentMethods::BANCONTACT,
-			PaymentMethods::GIROPAY,
 			PaymentMethods::GULDEN,
-			PaymentMethods::IDEAL,
 		);
 	}
 
@@ -65,23 +62,6 @@ class Gateway extends Core_Gateway {
 	public function payment_method_is_required() {
 		return true;
 	}
-
-	public function get_issuer_field() {
-		$payment_method = $this->get_payment_method();
-
-		if ( null === $payment_method || PaymentMethods::IDEAL === $payment_method ) {
-			return array(
-				'id'       => 'pronamic_ideal_issuer_id',
-				'name'     => 'pronamic_ideal_issuer_id',
-				'label'    => __( 'Choose your bank', 'pronamic_ideal' ),
-				'required' => true,
-				'type'     => 'select',
-				'choices'  => array( array( 'options' => $this->client->get_issuers() ) ),
-			);
-		}
-	}
-
-	/////////////////////////////////////////////////
 
 	/**
 	 * Start.
@@ -96,7 +76,7 @@ class Gateway extends Core_Gateway {
 		$amount         = $payment->get_amount();
 
 		if ( empty( $payment_method ) ) {
-			$payment_method = PaymentMethods::IDEAL;
+			$payment_method = PaymentMethods::GULDEN;
 		}
 
 		if ( PaymentMethods::GULDEN === $payment_method ) {
