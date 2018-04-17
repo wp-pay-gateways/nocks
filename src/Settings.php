@@ -55,11 +55,11 @@ class Settings extends GatewaySettings {
 	 * @return array
 	 */
 	public function fields( array $fields ) {
-		// API Key
+		// Access token.
 		$fields[] = array(
 			'filter'   => FILTER_SANITIZE_STRING,
 			'section'  => 'nocks',
-			'meta_key' => '_pronamic_gateway_nocks_api_key',
+			'meta_key' => '_pronamic_gateway_nocks_access_token',
 			'title'    => _x( 'Access Token', 'nocks', 'pronamic_ideal' ),
 			'type'     => 'textarea',
 			'classes'  => array( 'code' ),
@@ -107,10 +107,10 @@ class Settings extends GatewaySettings {
 	 * @param array $field Settings field.
 	 */
 	public function field_merchant_profile( $field ) {
-		$api_key          = get_post_meta( get_the_ID(), '_pronamic_gateway_nocks_api_key', true );
+		$access_token     = get_post_meta( get_the_ID(), '_pronamic_gateway_nocks_access_token', true );
 		$merchant_profile = get_post_meta( get_the_ID(), '_pronamic_gateway_nocks_merchant_profile', true );
 
-		if ( ! $api_key ) {
+		if ( ! $access_token ) {
 			esc_html_e( 'First enter an API Key and save the configuration, to be able to choose from your Nocks merchant profiles.', 'pronamic_ideal' );
 
 			return;
@@ -118,7 +118,7 @@ class Settings extends GatewaySettings {
 
 		$client = new Client();
 
-		$client->set_api_key( $api_key );
+		$client->set_access_token( $access_token );
 
 		// Select merchant profile.
 		printf( '<select name="%s">', esc_attr( $field['meta_key'] ) );

@@ -15,7 +15,7 @@ use Pronamic\WordPress\Pay\Core\GatewayConfig;
  * @since 1.0.0
  */
 class Config extends GatewayConfig {
-	public $api_key;
+	public $access_token;
 
 	public $merchant_profile;
 }

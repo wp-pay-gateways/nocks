@@ -32,19 +32,25 @@ class Client {
 	const NOCKS_DOMAIN = 'https://www.nocks.com/';
 
 	/**
+	 * Access Token.
+	 *
+	 * @var string
+	 */
+	private $access_token;
+
+	/**
+	 * Merchant profile.
+	 *
+	 * @var string
+	 */
+	private $merchant_profile;
+
+	/**
 	 * Error
 	 *
 	 * @var WP_Error
 	 */
 	private $error;
-
-	/**
-	 * The URL.
-	 *
-	 * @var string
-	 */
-	private $url;
-
 
 	/**
 	 * Error
@@ -56,17 +62,19 @@ class Client {
 	}
 
 	/**
-	 * Get API key.
+	 * Get access token.
 	 */
-	public function get_api_key() {
-		return $this->api_key;
+	public function get_access_token() {
+		return $this->access_token;
 	}
 
 	/**
-	 * Set API key.
+	 * Set access token.
+	 *
+	 * @param string $access_token Access token.
 	 */
-	public function set_api_key( $api_key ) {
-		$this->api_key = $api_key;
+	public function set_access_token( $access_token ) {
+		$this->access_token = $access_token;
 	}
 
 	/**
@@ -126,7 +134,7 @@ class Client {
 			'headers' => array(
 				'Accept'        => 'application/json',
 				'Content-Type'  => 'application/json',
-				'Authorization' => 'Bearer ' . $this->api_key,
+				'Authorization' => 'Bearer ' . $this->get_access_token(),
 			),
 			'body'    => $data,
 		) );

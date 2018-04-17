@@ -20,7 +20,7 @@ class ConfigFactory extends GatewayConfigFactory {
 
 		$config->post_id          = $post_id;
 		$config->mode             = get_post_meta( $post_id, '_pronamic_gateway_mode', true );
-		$config->api_key          = get_post_meta( $post_id, '_pronamic_gateway_nocks_api_key', true );
+		$config->access_token     = get_post_meta( $post_id, '_pronamic_gateway_nocks_access_token', true );
 		$config->merchant_profile = get_post_meta( $post_id, '_pronamic_gateway_nocks_merchant_profile', true );
 
 		return $config;

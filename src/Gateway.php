@@ -32,7 +32,7 @@ class Gateway extends Core_Gateway {
 		// Client.
 		$this->client = new Client();
 
-		$this->client->set_api_key( $config->api_key );
+		$this->client->set_access_token( $config->access_token );
 		$this->client->set_merchant_profile( $config->merchant_profile );
 
 		// Feature supports.
