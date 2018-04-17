@@ -230,15 +230,15 @@ class Client {
 	 */
 	public function get_transaction_quote( $source_currency, $target_currency, $amount, $payment_method ) {
 		$data = array(
-            'source_currency'  => $source_currency,
-            'target_currency'  => $target_currency,
-            'merchant_profile' => $this->get_merchant_profile(),
-            'amount'           => array(
-                'amount'   => (string) $amount,
-                'currency' => $source_currency
-            ),
-            'payment_method'   => array( 'method' => $payment_method )
-        );
+			'source_currency'  => $source_currency,
+			'target_currency'  => $target_currency,
+			'merchant_profile' => $this->get_merchant_profile(),
+			'amount'           => array(
+				'amount'   => (string) $amount,
+				'currency' => $source_currency,
+			),
+			'payment_method'   => array( 'method' => $payment_method ),
+		);
 
 		return $this->send_request(
 			'transaction/quote',
