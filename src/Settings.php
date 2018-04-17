@@ -27,12 +27,6 @@ class Settings extends GatewaySettings {
 			'methods' => array( 'nocks' ),
 		);
 
-		// Advanced
-		$sections['nocks_advanced'] = array(
-			'title'   => __( 'Advanced', 'pronamic_ideal' ),
-			'methods' => array( 'nocks' ),
-		);
-
 		// Transaction feedback
 		$sections['nocks_feedback'] = array(
 			'title'       => __( 'Transaction feedback', 'pronamic_ideal' ),
@@ -72,33 +66,6 @@ class Settings extends GatewaySettings {
 			'html'    => sprintf(
 				'<span class="dashicons dashicons-yes"></span> %s',
 				__( 'Payment status updates will be processed without any additional configuration.', 'pronamic_ideal' )
-			),
-		);
-
-		// Purchase ID
-		$fields[] = array(
-			'filter'      => FILTER_SANITIZE_STRING,
-			'section'     => 'nocks_advanced',
-			'meta_key'    => '_pronamic_gateway_nocks_order_id',
-			'title'       => __( 'Order ID', 'pronamic_ideal' ),
-			'type'        => 'text',
-			'classes'     => array( 'regular-text', 'code' ),
-			'tooltip'     => sprintf(
-				__( 'The Nocks %s parameter.', 'pronamic_ideal' ),
-				sprintf( '<code>%s</code>', 'orderId' )
-			),
-			'description' => sprintf(
-				'%s %s<br />%s',
-				__( 'Available tags:', 'pronamic_ideal' ),
-				sprintf(
-					'<code>%s</code> <code>%s</code>',
-					'{order_id}',
-					'{payment_id}'
-				),
-				sprintf(
-					__( 'Default: <code>%s</code>', 'pronamic_ideal' ),
-					'{payment_id}'
-				)
 			),
 		);
 

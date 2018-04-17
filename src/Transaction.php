@@ -55,7 +55,6 @@ class Transaction {
 			),
 			'metadata'         => array(
 				'pronamic_payment_id' => $this->payment_id,
-				//'order_id'            => $this->order_id,
 			),
 			'description'      => $this->description,
 			'redirect_url'     => $this->redirect_url,
