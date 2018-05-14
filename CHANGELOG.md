@@ -7,7 +7,7 @@ This projects adheres to [Semantic Versioning](http://semver.org/) and [Keep a C
 ## [Unreleased][unreleased]
 -
 
-## 1.0.0 - 2018-02-14
+## 1.0.0 - 2018-05-14
 - First release.
 
 [unreleased]: https://github.com/wp-pay-gateways/nocks/compare/1.0.0...HEAD
