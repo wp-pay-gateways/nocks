@@ -1,0 +1,49 @@
+{
+	"name": "wp-pay-gateways/nocks",
+	"description": "Nocks driver for the WordPress payment processing library.",
+	"keywords": ["wordpress", "wp", "pay", "nocks", "gateway", "pronamic"],
+	"homepage": "http://www.wp-pay.org/gateways/nocks/",
+	"license": "GPL-3.0-or-later" ,
+	"authors": [
+		{
+			"name": "Pronamic",
+			"email": "info@pronamic.eu",
+			"homepage": "http://www.pronamic.eu/",
+			"role": "Company"
+		},
+		{
+			"name": "Remco Tolsma",
+			"email": "info@remcotolsma.nl",
+			"homepage": "http://www.remcotolsma.nl/",
+			"role": "Developer"
+		}
+	],
+	"support": {
+		"email": "support@wp-pay.org",
+		"issues": "https://github.com/wp-pay-gateways/nocks/issues",
+		"source": "https://github.com/wp-pay-gateways/nocks"
+	},
+	"autoload": {
+		"psr-4": {
+			"Pronamic\\WordPress\\Pay\\Gateways\\Nocks\\": "src/"
+		}
+	},
+	"config": {
+		"platform": {
+			"php": "5.3.3"
+		}
+	},
+	"require": {
+		"php": "^5.3",
+		"wp-pay/core": "^2.0",
+		"wp-pay-gateways/common": "^2.0"
+	},
+	"require-dev": {
+		"php-coveralls/php-coveralls": "^1.0",
+		"phpmd/phpmd": "^2.2.3",
+		"phpunit/phpunit": "^4.5",
+		"squizlabs/php_codesniffer": "^2.7",
+		"wp-coding-standards/wpcs": "^0.14.0",
+		"wimg/php-compatibility": "^8.0"
+	}
+}
