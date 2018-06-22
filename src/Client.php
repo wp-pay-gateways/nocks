@@ -108,6 +108,7 @@ class Client {
 			'FVLBNL22' => __( 'Van Lanschot', 'pronamic_ideal' ),
 			'KNABNL2H' => __( 'Knab', 'pronamic_ideal' ),
 			'BUNQNL2A' => __( 'Bunq', 'pronamic_ideal' ),
+			'MOYONL21' => __( 'MoneYou', 'pronamic_ideal' ),
 		);
 	}
 
