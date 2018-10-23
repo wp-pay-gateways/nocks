@@ -18,7 +18,7 @@ class Client {
 	/**
 	 * URL Nocks API.
 	 *
-	 * @see https://docs.nocks.com/
+	 * @link https://docs.nocks.com/
 	 *
 	 * @var string
 	 */
