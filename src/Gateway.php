@@ -59,7 +59,7 @@ class Gateway extends Core_Gateway {
 	 */
 	public function start( Payment $payment ) {
 		$payment_method = $payment->get_method();
-		$currency       = $payment->get_currency();
+		$currency       = $payment->get_total_amount()->get_currency()->get_alphabetic_code();
 		$amount         = $payment->get_total_amount()->get_amount();
 
 		if ( empty( $payment_method ) ) {
