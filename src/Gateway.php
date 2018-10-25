@@ -4,6 +4,7 @@ namespace Pronamic\WordPress\Pay\Gateways\Nocks;
 
 use Pronamic\WordPress\Pay\Core\Gateway as Core_Gateway;
 use Pronamic\WordPress\Pay\Core\PaymentMethods;
+use Pronamic\WordPress\Pay\Core\Statuses as Core_Statuses;
 use Pronamic\WordPress\Pay\Payments\Payment;
 
 /**
@@ -17,6 +18,13 @@ use Pronamic\WordPress\Pay\Payments\Payment;
  * @since   1.0.0
  */
 class Gateway extends Core_Gateway {
+	/**
+	 * Client.
+	 *
+	 * @var Client
+	 */
+	protected $client;
+
 	/**
 	 * Constructs and initializes an Nocks gateway.
 	 *
@@ -98,8 +106,10 @@ class Gateway extends Core_Gateway {
 			$transaction->issuer = $payment->get_issuer();
 		}
 
+		// Start transaction.
 		$result = $this->client->start_transaction( $transaction );
 
+		// Handle errors.
 		$error = $this->client->get_error();
 
 		if ( is_wp_error( $error ) ) {
@@ -108,6 +118,7 @@ class Gateway extends Core_Gateway {
 			return;
 		}
 
+		// Update payment.
 		if ( isset( $result->data->payments->data[0]->uuid ) ) {
 			$payment->set_transaction_id( $result->data->uuid );
 		}
