@@ -96,12 +96,16 @@ class Gateway extends Core_Gateway {
 		$transaction->description      = $payment->get_description();
 		$transaction->currency         = $currency;
 		$transaction->amount           = $amount;
-		$transaction->locale           = $payment->get_locale();
 		$transaction->payment_method   = Methods::transform( $payment->get_method() );
 		$transaction->redirect_url     = $payment->get_return_url();
 		$transaction->callback_url     = add_query_arg( 'nocks_webhook', '', home_url( '/' ) );
 		$transaction->description      = $payment->get_description();
 
+		if ( null !== $payment->get_customer() ) {
+			$transaction->locale = $payment->get_customer()->get_locale();
+		}
+
+		// Issuer.
 		if ( Methods::IDEAL === $transaction->payment_method ) {
 			$transaction->issuer = $payment->get_issuer();
 		}
