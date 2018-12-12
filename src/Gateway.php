@@ -4,6 +4,7 @@ namespace Pronamic\WordPress\Pay\Gateways\Nocks;
 
 use Pronamic\WordPress\Pay\Core\Gateway as Core_Gateway;
 use Pronamic\WordPress\Pay\Core\PaymentMethods;
+use Pronamic\WordPress\Pay\Core\Statuses as Core_Statuses;
 use Pronamic\WordPress\Pay\Payments\Payment;
 
 /**
@@ -13,10 +14,17 @@ use Pronamic\WordPress\Pay\Payments\Payment;
  * Company: Pronamic
  *
  * @author  Reüel van der Steege
- * @version 2.0.0
+ * @version 2.0.1
  * @since   1.0.0
  */
 class Gateway extends Core_Gateway {
+	/**
+	 * Client.
+	 *
+	 * @var Client
+	 */
+	protected $client;
+
 	/**
 	 * Constructs and initializes an Nocks gateway.
 	 *
@@ -25,9 +33,7 @@ class Gateway extends Core_Gateway {
 	public function __construct( Config $config ) {
 		parent::__construct( $config );
 
-		$this->set_method( Gateway::METHOD_HTTP_REDIRECT );
-		$this->set_has_feedback( true );
-		$this->set_amount_minimum( 0.01 );
+		$this->set_method( self::METHOD_HTTP_REDIRECT );
 
 		// Client.
 		$this->client = new Client();
@@ -61,8 +67,8 @@ class Gateway extends Core_Gateway {
 	 */
 	public function start( Payment $payment ) {
 		$payment_method = $payment->get_method();
-		$currency       = $payment->get_currency();
-		$amount         = $payment->get_amount()->get_amount();
+		$currency       = $payment->get_total_amount()->get_currency()->get_alphabetic_code();
+		$amount         = $payment->get_total_amount()->get_value();
 
 		if ( empty( $payment_method ) ) {
 			$payment_method = PaymentMethods::GULDEN;
@@ -90,18 +96,24 @@ class Gateway extends Core_Gateway {
 		$transaction->description      = $payment->get_description();
 		$transaction->currency         = $currency;
 		$transaction->amount           = $amount;
-		$transaction->locale           = $payment->get_locale();
 		$transaction->payment_method   = Methods::transform( $payment->get_method() );
 		$transaction->redirect_url     = $payment->get_return_url();
 		$transaction->callback_url     = add_query_arg( 'nocks_webhook', '', home_url( '/' ) );
 		$transaction->description      = $payment->get_description();
 
+		if ( null !== $payment->get_customer() ) {
+			$transaction->locale = $payment->get_customer()->get_locale();
+		}
+
+		// Issuer.
 		if ( Methods::IDEAL === $transaction->payment_method ) {
 			$transaction->issuer = $payment->get_issuer();
 		}
 
+		// Start transaction.
 		$result = $this->client->start_transaction( $transaction );
 
+		// Handle errors.
 		$error = $this->client->get_error();
 
 		if ( is_wp_error( $error ) ) {
@@ -110,6 +122,7 @@ class Gateway extends Core_Gateway {
 			return;
 		}
 
+		// Update payment.
 		if ( isset( $result->data->payments->data[0]->uuid ) ) {
 			$payment->set_transaction_id( $result->data->uuid );
 		}

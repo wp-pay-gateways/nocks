@@ -11,14 +11,14 @@ use WP_Error;
  * Company: Pronamic
  *
  * @author  Reüel van der Steege
- * @version 2.0.0
+ * @version 2.0.1
  * @since   1.0.0
  */
 class Client {
 	/**
 	 * URL Nocks API.
 	 *
-	 * @see https://docs.nocks.com/
+	 * @link https://docs.nocks.com/
 	 *
 	 * @var string
 	 */
@@ -108,6 +108,7 @@ class Client {
 			'FVLBNL22' => __( 'Van Lanschot', 'pronamic_ideal' ),
 			'KNABNL2H' => __( 'Knab', 'pronamic_ideal' ),
 			'BUNQNL2A' => __( 'Bunq', 'pronamic_ideal' ),
+			'MOYONL21' => __( 'MoneYou', 'pronamic_ideal' ),
 		);
 	}
 
