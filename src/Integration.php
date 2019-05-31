@@ -21,6 +21,11 @@ class Integration extends AbstractIntegration {
 		$this->product_url   = 'https://www.nocks.com/';
 		$this->dashboard_url = 'https://www.nocks.com/';
 		$this->provider      = 'nocks';
+		$this->supports      = array(
+			'payment_status_request',
+			'webhook',
+			'webhook_no_config',
+		);
 
 		// Actions
 		$function = array( __NAMESPACE__ . '\Listener', 'listen' );
@@ -70,7 +75,6 @@ class Integration extends AbstractIntegration {
 			'classes'  => array( 'large-text', 'code' ),
 			'value'    => add_query_arg( 'nocks_webhook', '', home_url( '/' ) ),
 			'readonly' => true,
-			'methods'  => array( 'nocks' ),
 			'tooltip'  => __( 'The Webhook URL as sent with each transaction to receive automatic payment status updates on.', 'pronamic_ideal' ),
 		);
 
