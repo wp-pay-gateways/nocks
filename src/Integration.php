@@ -35,10 +35,6 @@ class Integration extends AbstractIntegration {
 		}
 	}
 
-	public function get_config_factory_class() {
-		return __NAMESPACE__ . '\ConfigFactory';
-	}
-
 	/**
 	 * Get settings fields.
 	 *
@@ -118,5 +114,16 @@ class Integration extends AbstractIntegration {
 		echo Pay_Util::select_options_grouped( $options, $merchant_profile ); // WPCS: xss ok.
 
 		echo '</select>';
+	}
+
+	public function get_config( $post_id ) {
+		$config = new Config();
+
+		$config->post_id          = $post_id;
+		$config->mode             = get_post_meta( $post_id, '_pronamic_gateway_mode', true );
+		$config->access_token     = get_post_meta( $post_id, '_pronamic_gateway_nocks_access_token', true );
+		$config->merchant_profile = get_post_meta( $post_id, '_pronamic_gateway_nocks_merchant_profile', true );
+
+		return $config;
 	}
 }
