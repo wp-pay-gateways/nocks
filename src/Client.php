@@ -130,15 +130,18 @@ class Client {
 			$data = wp_json_encode( $data );
 		}
 
-		$response = wp_remote_request( $url, array(
-			'method'  => $method,
-			'headers' => array(
-				'Accept'        => 'application/json',
-				'Content-Type'  => 'application/json',
-				'Authorization' => 'Bearer ' . $this->get_access_token(),
-			),
-			'body'    => $data,
-		) );
+		$response = wp_remote_request(
+			$url,
+			array(
+				'method'  => $method,
+				'headers' => array(
+					'Accept'        => 'application/json',
+					'Content-Type'  => 'application/json',
+					'Authorization' => 'Bearer ' . $this->get_access_token(),
+				),
+				'body'    => $data,
+			)
+		);
 
 		// Response code.
 		$response_code = wp_remote_retrieve_response_code( $response );
