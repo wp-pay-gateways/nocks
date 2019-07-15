@@ -38,7 +38,6 @@ class Gateway extends Core_Gateway {
 		// Supported features.
 		$this->supports = array(
 			'payment_status_request',
-			'webhook_log',
 		);
 
 		// Client.
