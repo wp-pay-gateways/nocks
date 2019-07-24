@@ -41,7 +41,6 @@ class Gateway extends Core_Gateway {
 		parent::__construct( $config );
 
 		$this->set_method( self::METHOD_HTTP_REDIRECT );
-		$this->set_slug( self::SLUG );
 
 		// Supported features.
 		$this->supports = array(
