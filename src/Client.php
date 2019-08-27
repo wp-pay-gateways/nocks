@@ -7,7 +7,7 @@ use WP_Error;
 /**
  * Title: Nocks client
  * Description:
- * Copyright: Copyright (c) 2005 - 2018
+ * Copyright: 2005-2019 Pronamic
  * Company: Pronamic
  *
  * @author  Reüel van der Steege
@@ -108,7 +108,7 @@ class Client {
 			'FVLBNL22' => __( 'Van Lanschot', 'pronamic_ideal' ),
 			'KNABNL2H' => __( 'Knab', 'pronamic_ideal' ),
 			'BUNQNL2A' => __( 'Bunq', 'pronamic_ideal' ),
-			'MOYONL21' => __( 'MoneYou', 'pronamic_ideal' ),
+			'MOYONL21' => __( 'Moneyou', 'pronamic_ideal' ),
 		);
 	}
 
@@ -130,20 +130,24 @@ class Client {
 			$data = wp_json_encode( $data );
 		}
 
-		$response = wp_remote_request( $url, array(
-			'method'  => $method,
-			'headers' => array(
-				'Accept'        => 'application/json',
-				'Content-Type'  => 'application/json',
-				'Authorization' => 'Bearer ' . $this->get_access_token(),
-			),
-			'body'    => $data,
-		) );
+		$response = wp_remote_request(
+			$url,
+			array(
+				'method'  => $method,
+				'headers' => array(
+					'Accept'        => 'application/json',
+					'Content-Type'  => 'application/json',
+					'Authorization' => 'Bearer ' . $this->get_access_token(),
+				),
+				'body'    => $data,
+			)
+		);
 
 		// Response code.
 		$response_code = wp_remote_retrieve_response_code( $response );
 
-		if ( $expected_response_code != $response_code ) { // WPCS: loose comparison ok.
+		// phpcs:ignore WordPress.PHP.StrictComparisons.LooseComparison
+		if ( $expected_response_code != $response_code ) {
 			$this->error = new WP_Error( 'nocks_error', 'Unexpected response code.' );
 		}
 
