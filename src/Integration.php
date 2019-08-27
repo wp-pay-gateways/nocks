@@ -112,7 +112,8 @@ class Integration extends AbstractIntegration {
 			),
 		);
 
-		echo Pay_Util::select_options_grouped( $options, $merchant_profile ); // WPCS: xss ok.
+		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		echo Pay_Util::select_options_grouped( $options, $merchant_profile );
 
 		echo '</select>';
 	}
