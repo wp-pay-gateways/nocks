@@ -2,7 +2,7 @@
 
 namespace Pronamic\WordPress\Pay\Gateways\Nocks;
 
-use Pronamic\WordPress\Pay\Core\Statuses as Core_Statuses;
+use Pronamic\WordPress\Pay\Payments\PaymentStatus as Core_Statuses;
 
 /**
  * Title: Nocks statuses
