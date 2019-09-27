@@ -120,15 +120,6 @@ class Gateway extends Core_Gateway {
 		// Start transaction.
 		$result = $this->client->start_transaction( $transaction );
 
-		// Handle errors.
-		$error = $this->client->get_error();
-
-		if ( is_wp_error( $error ) ) {
-			$this->error = $error;
-
-			return;
-		}
-
 		// Update payment.
 		if ( isset( $result->data->payments->data[0]->uuid ) ) {
 			$payment->set_transaction_id( $result->data->uuid );
