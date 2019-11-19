@@ -130,7 +130,7 @@ class Client {
 
 		// phpcs:ignore WordPress.PHP.StrictComparisons.LooseComparison
 		if ( $expected_response_code != $response_code ) {
-			throw new \Pronamic\WordPress\Pay\GatewayException( 'nocks', 'Unexpected response code.' );
+			throw new \Exception( 'Unexpected response code.' );
 		}
 
 		// Body.
@@ -139,12 +139,12 @@ class Client {
 		$data = json_decode( $body );
 
 		if ( ! is_object( $data ) ) {
-			throw new \Pronamic\WordPress\Pay\GatewayException( 'nocks', 'Could not parse response.' );
+			throw new \Exception( 'Could not parse response.' );
 		}
 
 		// Nocks error.
 		if ( isset( $data->error, $data->error->message ) ) {
-			throw new \Pronamic\WordPress\Pay\GatewayException( 'nocks', $data->error->message, $data->error );
+			throw new \Exception( $data->error->message );
 		}
 
 		return $data;

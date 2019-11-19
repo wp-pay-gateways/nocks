@@ -138,7 +138,11 @@ class Gateway extends Core_Gateway {
 	public function update_status( Payment $payment ) {
 		$transaction_id = $payment->get_transaction_id();
 
-		$nocks_payment = $this->client->get_transaction( $transaction_id );
+		try {
+			$nocks_payment = $this->client->get_transaction( $transaction_id );
+		} catch ( \Exception $e ) {
+			return;
+		}
 
 		if ( ! $nocks_payment ) {
 			$payment->set_status( Core_Statuses::FAILURE );
