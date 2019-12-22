@@ -2,8 +2,6 @@
 
 namespace Pronamic\WordPress\Pay\Gateways\Nocks;
 
-use WP_Error;
-
 /**
  * Title: Nocks client
  * Description:
@@ -11,7 +9,7 @@ use WP_Error;
  * Company: Pronamic
  *
  * @author  Reüel van der Steege
- * @version 2.0.1
+ * @version 2.0.3
  * @since   1.0.0
  */
 class Client {
@@ -44,22 +42,6 @@ class Client {
 	 * @var string
 	 */
 	private $merchant_profile;
-
-	/**
-	 * Error
-	 *
-	 * @var WP_Error
-	 */
-	private $error;
-
-	/**
-	 * Error
-	 *
-	 * @return WP_Error
-	 */
-	public function get_error() {
-		return $this->error;
-	}
 
 	/**
 	 * Get access token.
@@ -148,7 +130,7 @@ class Client {
 
 		// phpcs:ignore WordPress.PHP.StrictComparisons.LooseComparison
 		if ( $expected_response_code != $response_code ) {
-			$this->error = new WP_Error( 'nocks_error', 'Unexpected response code.' );
+			throw new \Exception( 'Unexpected response code.' );
 		}
 
 		// Body.
@@ -157,16 +139,12 @@ class Client {
 		$data = json_decode( $body );
 
 		if ( ! is_object( $data ) ) {
-			$this->error = new WP_Error( 'nocks_error', 'Could not parse response.' );
-
-			return false;
+			throw new \Exception( 'Could not parse response.' );
 		}
 
 		// Nocks error.
 		if ( isset( $data->error, $data->error->message ) ) {
-			$this->error = new WP_Error( 'nocks_error', $data->error->message, $data->error );
-
-			return false;
+			throw new \Exception( $data->error->message );
 		}
 
 		return $data;
