@@ -7,7 +7,7 @@ use Pronamic\WordPress\Pay\Payments\PaymentStatus as Core_Statuses;
 /**
  * Title: Nocks statuses
  * Description:
- * Copyright: 2005-2019 Pronamic
+ * Copyright: 2005-2020 Pronamic
  * Company: Pronamic
  *
  * @author  Reüel van der Steege
