@@ -3,6 +3,7 @@
 namespace Pronamic\WordPress\Pay\Gateways\Nocks;
 
 use Pronamic\WordPress\Pay\Gateways\Common\AbstractIntegration;
+use Pronamic\WordPress\Pay\Util;
 
 /**
  * Title: Nocks integration
@@ -104,7 +105,11 @@ class Integration extends AbstractIntegration {
 			__( '— Select Merchant Profile —', 'pronamic_ideal' ),
 		);
 
-		$options = array_merge( $options, $client->get_merchant_profiles() );
+		try {
+			$options = array_merge( $options, $client->get_merchant_profiles() );
+		} catch ( \Exception $e ) {
+			// What to do?
+		}
 
 		$options = array(
 			array(
@@ -113,7 +118,7 @@ class Integration extends AbstractIntegration {
 		);
 
 		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-		echo Pay_Util::select_options_grouped( $options, $merchant_profile );
+		echo Util::select_options_grouped( $options, $merchant_profile );
 
 		echo '</select>';
 	}
@@ -121,9 +126,9 @@ class Integration extends AbstractIntegration {
 	public function get_config( $post_id ) {
 		$config = new Config();
 
-		$config->mode             = get_post_meta( $post_id, '_pronamic_gateway_mode', true );
-		$config->access_token     = get_post_meta( $post_id, '_pronamic_gateway_nocks_access_token', true );
-		$config->merchant_profile = get_post_meta( $post_id, '_pronamic_gateway_nocks_merchant_profile', true );
+		$config->mode             = $this->get_meta( $post_id, '_pronamic_gateway_mode' );
+		$config->access_token     = $this->get_meta( $post_id, '_pronamic_gateway_nocks_access_token' );
+		$config->merchant_profile = $this->get_meta( $post_id, '_pronamic_gateway_nocks_merchant_profile' );
 
 		return $config;
 	}
