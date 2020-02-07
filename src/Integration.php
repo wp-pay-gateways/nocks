@@ -17,6 +17,8 @@ use Pronamic\WordPress\Pay\Util;
  */
 class Integration extends AbstractIntegration {
 	public function __construct() {
+		parent::__construct();
+
 		$this->id            = 'nocks';
 		$this->name          = 'Nocks - Checkout';
 		$this->product_url   = 'https://www.nocks.com/';
