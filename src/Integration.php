@@ -2,7 +2,7 @@
 
 namespace Pronamic\WordPress\Pay\Gateways\Nocks;
 
-use Pronamic\WordPress\Pay\Gateways\Common\AbstractIntegration;
+use Pronamic\WordPress\Pay\AbstractGatewayIntegration;
 use Pronamic\WordPress\Pay\Util;
 
 /**
@@ -15,21 +15,31 @@ use Pronamic\WordPress\Pay\Util;
  * @version 2.0.0
  * @since   1.0.0
  */
-class Integration extends AbstractIntegration {
-	public function __construct() {
-		parent::__construct();
-
-		$this->id            = 'nocks';
-		$this->name          = 'Nocks - Checkout';
-		$this->product_url   = 'https://www.nocks.com/';
-		$this->dashboard_url = 'https://www.nocks.com/';
-		$this->provider      = 'nocks';
-		$this->supports      = array(
-			'payment_status_request',
-			'webhook',
-			'webhook_log',
-			'webhook_no_config',
+class Integration extends AbstractGatewayIntegration {
+	/**
+	 * Construct Nocks integration.
+	 *
+	 * @param array $args Arguments.
+	 */
+	public function __construct( $args = array() ) {
+		$args = wp_parse_args(
+			$args,
+			array(
+				'id'            => 'nocks',
+				'name'          => 'Nocks - Checkout',
+				'product_url'   => 'https://www.nocks.com/',
+				'dashboard_url' => 'https://www.nocks.com/',
+				'provider'      => 'nocks',
+				'supports'      => array(
+					'payment_status_request',
+					'webhook',
+					'webhook_log',
+					'webhook_no_config',
+				),
+			)
 		);
+
+		parent::__construct( $args );
 
 		// Actions
 		$function = array( __NAMESPACE__ . '\Listener', 'listen' );
