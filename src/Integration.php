@@ -2,31 +2,44 @@
 
 namespace Pronamic\WordPress\Pay\Gateways\Nocks;
 
-use Pronamic\WordPress\Pay\Gateways\Common\AbstractIntegration;
+use Pronamic\WordPress\Pay\AbstractGatewayIntegration;
+use Pronamic\WordPress\Pay\Util;
 
 /**
  * Title: Nocks integration
  * Description:
- * Copyright: 2005-2019 Pronamic
+ * Copyright: 2005-2020 Pronamic
  * Company: Pronamic
  *
  * @author  Reüel van der Steege
  * @version 2.0.0
  * @since   1.0.0
  */
-class Integration extends AbstractIntegration {
-	public function __construct() {
-		$this->id            = 'nocks';
-		$this->name          = 'Nocks - Checkout';
-		$this->product_url   = 'https://www.nocks.com/';
-		$this->dashboard_url = 'https://www.nocks.com/';
-		$this->provider      = 'nocks';
-		$this->supports      = array(
-			'payment_status_request',
-			'webhook',
-			'webhook_log',
-			'webhook_no_config',
+class Integration extends AbstractGatewayIntegration {
+	/**
+	 * Construct Nocks integration.
+	 *
+	 * @param array $args Arguments.
+	 */
+	public function __construct( $args = array() ) {
+		$args = wp_parse_args(
+			$args,
+			array(
+				'id'            => 'nocks',
+				'name'          => 'Nocks - Checkout',
+				'product_url'   => 'https://www.nocks.com/',
+				'dashboard_url' => 'https://www.nocks.com/',
+				'provider'      => 'nocks',
+				'supports'      => array(
+					'payment_status_request',
+					'webhook',
+					'webhook_log',
+					'webhook_no_config',
+				),
+			)
 		);
+
+		parent::__construct( $args );
 
 		// Actions
 		$function = array( __NAMESPACE__ . '\Listener', 'listen' );
@@ -104,7 +117,11 @@ class Integration extends AbstractIntegration {
 			__( '— Select Merchant Profile —', 'pronamic_ideal' ),
 		);
 
-		$options = array_merge( $options, $client->get_merchant_profiles() );
+		try {
+			$options = array_merge( $options, $client->get_merchant_profiles() );
+		} catch ( \Exception $e ) {
+			// What to do?
+		}
 
 		$options = array(
 			array(
@@ -113,7 +130,7 @@ class Integration extends AbstractIntegration {
 		);
 
 		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-		echo Pay_Util::select_options_grouped( $options, $merchant_profile );
+		echo Util::select_options_grouped( $options, $merchant_profile );
 
 		echo '</select>';
 	}
@@ -121,9 +138,9 @@ class Integration extends AbstractIntegration {
 	public function get_config( $post_id ) {
 		$config = new Config();
 
-		$config->mode             = get_post_meta( $post_id, '_pronamic_gateway_mode', true );
-		$config->access_token     = get_post_meta( $post_id, '_pronamic_gateway_nocks_access_token', true );
-		$config->merchant_profile = get_post_meta( $post_id, '_pronamic_gateway_nocks_merchant_profile', true );
+		$config->mode             = $this->get_meta( $post_id, '_pronamic_gateway_mode' );
+		$config->access_token     = $this->get_meta( $post_id, '_pronamic_gateway_nocks_access_token' );
+		$config->merchant_profile = $this->get_meta( $post_id, '_pronamic_gateway_nocks_merchant_profile' );
 
 		return $config;
 	}

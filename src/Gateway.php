@@ -10,7 +10,7 @@ use Pronamic\WordPress\Pay\Payments\Payment;
 /**
  * Title: Nocks gateway
  * Description:
- * Copyright: 2005-2019 Pronamic
+ * Copyright: 2005-2020 Pronamic
  * Company: Pronamic
  *
  * @author  Reüel van der Steege
@@ -87,7 +87,7 @@ class Gateway extends Core_Gateway {
 					// Convert to EUR.
 					$quote = $this->client->get_transaction_quote( 'EUR', 'NLG', $amount, Methods::IDEAL );
 
-					if ( $quote ) {
+					if ( \is_object( $quote ) && isset( $quote->data->target_amount->amount ) ) {
 						$amount   = $quote->data->target_amount->amount;
 						$currency = 'NLG';
 					}
@@ -138,20 +138,14 @@ class Gateway extends Core_Gateway {
 	public function update_status( Payment $payment ) {
 		$transaction_id = $payment->get_transaction_id();
 
+		// Get transaction.
 		try {
 			$nocks_payment = $this->client->get_transaction( $transaction_id );
 		} catch ( \Exception $e ) {
 			return;
 		}
 
-		if ( ! $nocks_payment ) {
-			$payment->set_status( Core_Statuses::FAILURE );
-
-			$this->error = $this->client->get_error();
-
-			return;
-		}
-
+		// Update status.
 		if ( is_object( $nocks_payment ) && isset( $nocks_payment->data->status ) ) {
 			$status = Statuses::transform( $nocks_payment->data->status );
 

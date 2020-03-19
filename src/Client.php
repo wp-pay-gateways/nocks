@@ -5,7 +5,7 @@ namespace Pronamic\WordPress\Pay\Gateways\Nocks;
 /**
  * Title: Nocks client
  * Description:
- * Copyright: 2005-2019 Pronamic
+ * Copyright: 2005-2020 Pronamic
  * Company: Pronamic
  *
  * @author  Reüel van der Steege
@@ -160,7 +160,7 @@ class Client {
 
 		$merchants = $this->send_request( 'merchant', 'GET' );
 
-		if ( $merchants ) {
+		if ( \is_object( $merchants ) && isset( $merchants->data ) ) {
 			foreach ( $merchants->data as $merchant ) {
 				foreach ( $merchant->merchant_profiles->data as $profile ) {
 					$profiles[ $profile->uuid ] = $merchant->name . ' - ' . $profile->name;
@@ -176,7 +176,7 @@ class Client {
 	 *
 	 * @param Transaction $transaction Transaction object.
 	 *
-	 * @return array|bool|mixed|object
+	 * @return bool|object
 	 */
 	public function start_transaction( Transaction $transaction ) {
 		return $this->send_request(
@@ -192,7 +192,7 @@ class Client {
 	 *
 	 * @param string $transaction_uuid Transaction UUID.
 	 *
-	 * @return array|bool|mixed|object
+	 * @return bool|object
 	 */
 	public function get_transaction( $transaction_uuid ) {
 		return $this->send_request(
@@ -209,7 +209,7 @@ class Client {
 	 * @param string $amount          Amount in given source currency.
 	 * @param string $payment_method  Payment method.
 	 *
-	 * @return array|bool|mixed|object
+	 * @return bool|object
 	 */
 	public function get_transaction_quote( $source_currency, $target_currency, $amount, $payment_method ) {
 		$data = array(
