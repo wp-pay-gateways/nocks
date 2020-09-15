@@ -1,4 +1,4 @@
-# WordPress Pay Gateway: Nocks
+# [DEPRECATED] WordPress Pay Gateway: Nocks
 
 **Nocks driver for the WordPress payment processing library.**
 
