@@ -36,6 +36,7 @@ class Integration extends AbstractGatewayIntegration {
 					'webhook_log',
 					'webhook_no_config',
 				),
+				'deprecated'    => true,
 			)
 		);
 
